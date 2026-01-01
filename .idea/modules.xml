@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FourierDrawer.iml" filepath="$PROJECT_DIR$/FourierDrawer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourier-drawer.iml" filepath="$PROJECT_DIR$/fourier-drawer.iml" />
     </modules>
   </component>
 </project>

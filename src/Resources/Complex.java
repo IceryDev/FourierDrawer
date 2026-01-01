@@ -2,13 +2,19 @@ package Resources;
 
 public class Complex {
     final double PI2_IN_DEG = 360;
+    final double DECIMAL_PRECISION = 1e-10;
 
     double Im = 0;
     double Re = 0;
 
     public Complex(double Re, double Im) {
-        this.Im = Im;
-        this.Re = Re;
+        this.Im = truncate(Im);
+        this.Re = truncate(Re);
+    }
+
+    // To prevent unnecessary arrows in the visualisation
+    public double truncate(double value){
+        return (Math.abs(value) < DECIMAL_PRECISION) ? 0 : value;
     }
 
     @Override
