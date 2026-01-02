@@ -2,7 +2,7 @@ package Resources;
 
 public class Complex {
     final double PI2_IN_DEG = 360;
-    final double DECIMAL_PRECISION = 1e-10;
+    public static final double DECIMAL_PRECISION = 1e-10;
 
     double Im = 0;
     double Re = 0;
@@ -51,7 +51,7 @@ public class Complex {
         Complex numerator = this.product(number.conjugate());
         return new Complex(
                 (numerator.Re / denominator.Re),
-                (numerator.Im / denominator.Im)
+                (numerator.Im / denominator.Re)
         );
     }
 
