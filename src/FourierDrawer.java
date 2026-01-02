@@ -1,23 +1,26 @@
 import Resources.Complex;
 import Resources.FourierCircle;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 
 public class FourierDrawer {
     public static void main(String[] args) {
 
         Complex[] points = { new Complex(1, 0), new Complex(0, 1),
                             new Complex(-1, 0), new Complex(0, -1)};
-        FourierCircle[] circles = performDFT(points);
+        FourierCircle[] circles = performDFT(points, 10);
 
         for (FourierCircle circle : circles){
-            System.out.println(circle.freqBin + ":" + circle.amplitude + ":" + circle.phase);
+            System.out.println(circle.amplitude + ":" + circle.phase + ":" + circle.angularVelocity);
         }
 
 
 
     }
 
-    public static FourierCircle[] performDFT(Complex[] points){
+    public static FourierCircle[] performDFT(Complex[] points, double drawTime){
 
         final int FREQ_BIN_COUNT = points.length;
         final double DFT_EXPONENT_CONSTANT = -Math.PI * 2 / FREQ_BIN_COUNT;
@@ -36,9 +39,11 @@ public class FourierDrawer {
 
             double amplitude = total.modulo();
             double phase = ((Math.abs(amplitude) < Complex.DECIMAL_PRECISION) ? 0 : total.argRad());
-            result[freqBin] = new FourierCircle(phase, amplitude, freqBin);
+            result[freqBin] = new FourierCircle(phase, amplitude,
+                    FourierCircle.getAngularVelocity(freqBin, points.length, drawTime));
 
         }
+        Arrays.sort(result, Comparator.comparingDouble(a -> a.amplitude));
         return result;
     }
 
