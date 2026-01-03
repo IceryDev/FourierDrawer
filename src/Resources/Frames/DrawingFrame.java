@@ -1,31 +1,64 @@
 package Resources.Frames;
 
+import Resources.Complex;
+import Resources.FourierCircle;
+import Resources.FourierDrawer;
+import Resources.Frames.Panels.DrawnContent;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.io.File;
 
 public class DrawingFrame extends JFrame {
 
-    final int SCREEN_WIDTH = 960;
-    final int SCREEN_HEIGHT = 720;
-
     File chosenFile;
     int sampleCount;
+    int drawTime;
 
-    public DrawingFrame(File chosenFile, int sampleCount){
+    public DrawingFrame(File chosenFile, int sampleCount, int drawTime){
 
         this.chosenFile = chosenFile;
         this.sampleCount = sampleCount;
+        this.drawTime = drawTime;
 
         System.out.println("I have the values File: " + chosenFile.getAbsolutePath() + ", and sample count of " + sampleCount);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         this.setResizable(false);
-        this.setLocationRelativeTo(null);
+        //this.setLocationRelativeTo(null);
         this.setTitle("Fourier Drawer");
         this.setIconImage(new ImageIcon("./src/Resources/Assets/Icon/Icon.png").getImage());
         this.getContentPane().setBackground(Color.BLACK);
+
+        //Stuff to calculate points here. For now, manually entering points.
+        Complex[] points = { new Complex(20, 0), new Complex(0, 20),
+                    new Complex(-20, 0), new Complex(0, -20)};
+
+        FourierCircle[] circles =
+                FourierDrawer.filterZeroAmplitudes(FourierDrawer.performDFT(points, this.drawTime));
+
+        for (FourierCircle circle : circles){
+            System.out.println(circle.amplitude + ":" + circle.phase + ":" + circle.angularVelocity);
+        }
+
+        DrawnContent mainPanel = new DrawnContent(circles);
+
+        Border outerGap = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+
+        Border titleScreenBorder = BorderFactory.createLineBorder(Color.WHITE);
+
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(outerGap, titleScreenBorder));
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                mainPanel.cleanup();
+            }
+        });
+
+        this.add(mainPanel);
+        this.pack();
         this.setVisible(true);
     }
 }

@@ -5,6 +5,9 @@ public class FourierCircle {
     public double amplitude;
     public double angularVelocity;
 
+    public Complex tailPos = new Complex(0, 0);
+    public Complex tipPos = new Complex(0, 0);
+
     public FourierCircle(double phase, double amplitude, double angularVelocity) {
         this.phase = phase;
         this.amplitude = amplitude;

@@ -1,24 +1,10 @@
-import Resources.Complex;
-import Resources.FourierCircle;
+package Resources;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
 
 public class FourierDrawer {
-    public static void main(String[] args) {
-
-        Complex[] points = { new Complex(1, 0), new Complex(0, 1),
-                            new Complex(-1, 0), new Complex(0, -1)};
-        FourierCircle[] circles = performDFT(points, 10);
-
-        for (FourierCircle circle : circles){
-            System.out.println(circle.amplitude + ":" + circle.phase + ":" + circle.angularVelocity);
-        }
-
-
-
-    }
 
     public static FourierCircle[] performDFT(Complex[] points, double drawTime){
 
@@ -45,6 +31,19 @@ public class FourierDrawer {
         }
         Arrays.sort(result, Comparator.comparingDouble(a -> a.amplitude));
         return result;
+    }
+
+    public static FourierCircle[] filterZeroAmplitudes(FourierCircle[] circles){
+        int zeroCount = 0;
+
+        for (int index = 0; circles[index].amplitude <= 0; index++){
+            zeroCount++;
+        }
+
+        FourierCircle[] filteredCircles = new FourierCircle[circles.length - zeroCount];
+        System.arraycopy(circles, zeroCount, filteredCircles, 0, filteredCircles.length);
+
+        return filteredCircles;
     }
 
 

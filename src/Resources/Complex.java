@@ -4,8 +4,8 @@ public class Complex {
     final double PI2_IN_DEG = 360;
     public static final double DECIMAL_PRECISION = 1e-10;
 
-    double Im = 0;
-    double Re = 0;
+    public double Im = 0;
+    public double Re = 0;
 
     public Complex(double Re, double Im) {
         this.Im = truncate(Im);
