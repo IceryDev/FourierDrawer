@@ -36,11 +36,14 @@ public class DrawingFrame extends JFrame {
                     new Complex((7 * this.scale), 0), new Complex(0, -(4 * this.scale))};*/
         Complex[] points = Temp.points;
         for (int index = 0; index < points.length; index++){
-            points[index].Im = -points[index].Im + 100;
+            //It is negative here to account for the coordinate system difference
+            points[index].Im = -points[index].Im;
         }
 
         FourierCircle[] circles =
-                FourierDrawer.filterZeroAmplitudes(FourierDrawer.performDFT(points, this.drawTime));
+                FourierDrawer.extractZeroFrequency(
+                        FourierDrawer.filterZeroAmplitudes(
+                                FourierDrawer.performDFT(points, this.drawTime)));
 
         for (FourierCircle circle : circles){
             System.out.println(circle.amplitude + ":" + circle.phase + ":" + circle.angularVelocity);

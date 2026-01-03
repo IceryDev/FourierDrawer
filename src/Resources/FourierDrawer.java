@@ -46,5 +46,17 @@ public class FourierDrawer {
         return filteredCircles;
     }
 
+    public static FourierCircle[] extractZeroFrequency(FourierCircle[] circles){
+        FourierCircle[] extractedArray = new FourierCircle[circles.length-1];
 
+        int extractedArrayIndex = 0;
+        for (FourierCircle circle : circles) {
+            if (circle.angularVelocity != 0){
+                extractedArray[extractedArrayIndex] = circle;
+                extractedArrayIndex++;
+            }
+        }
+
+        return extractedArray;
+    }
 }
