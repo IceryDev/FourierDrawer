@@ -16,18 +16,22 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
     final int SCREEN_HEIGHT = 360;
     final int INITIAL_SAMPLE_COUNT = 10;
     final int INITIAL_DRAW_TIME = 10;
+    final int INITIAL_SCALE = 5;
 
     JButton fileChoose;
     JButton confirmButton;
     JSlider sampleCountSlider;
     JSlider drawTimeSlider;
+    JSlider scaleSlider;
     JLabel sampleCountText;
     JLabel drawTimeText;
+    JLabel scaleText;
     JLabel fileText;
 
     File chosenFile = null;
     int sampleCount = INITIAL_SAMPLE_COUNT;
     int drawTime = INITIAL_DRAW_TIME;
+    int scale = INITIAL_SCALE;
 
     boolean fileSelected = false;
     public Title () {
@@ -116,6 +120,25 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
         drawTimeText.setBounds(25, 225, 200, 40);
         container.add(drawTimeText);
 
+        scaleSlider = new JSlider(1, 20, INITIAL_SCALE);
+        scaleSlider.setBounds(290, 200, 150, 40);
+        scaleSlider.setBackground(Color.BLACK);
+        scaleSlider.setPaintTicks(true);
+        scaleSlider.setPaintTrack(true);
+        scaleSlider.setMinorTickSpacing(1);
+        scaleSlider.setMajorTickSpacing(19);
+        scaleSlider.setPaintLabels(true);
+        scaleSlider.setForeground(Color.WHITE);
+        scaleSlider.addChangeListener(this);
+        container.add(scaleSlider);
+
+        scaleText = new JLabel();
+        scaleText.setText("Scale: x" + scaleSlider.getValue());
+        scaleText.setFont(new Font("Rockwell", Font.PLAIN, 15));
+        scaleText.setForeground(Color.WHITE);
+        scaleText.setBounds(280, 165, 150, 40);
+        container.add(scaleText);
+
         confirmButton = new JButton();
         confirmButton.setBounds(290, 250, 150, 40);
         confirmButton.setText("Start Drawing!");
@@ -163,7 +186,8 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
             }
         }
         else if (e.getSource()==confirmButton){
-            DrawingFrame newWindow = new DrawingFrame(this.chosenFile, this.sampleCount, this.drawTime);
+            DrawingFrame newWindow = new DrawingFrame(
+                    this.chosenFile, this.sampleCount, this.drawTime, this.scale);
         }
     }
 
@@ -176,6 +200,10 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
         else if(e.getSource() == drawTimeSlider){
             this.drawTime = drawTimeSlider.getValue();
             drawTimeText.setText("Draw Time: " + this.drawTime + " seconds");
+        }
+        else if(e.getSource() == scaleSlider) {
+            this.scale = scaleSlider.getValue();
+            scaleText.setText("Scale: x" + scaleSlider.getValue());
         }
     }
 }

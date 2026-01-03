@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
@@ -23,9 +25,11 @@ public class DrawnContent extends JPanel implements ActionListener{
     FourierCircle[] circles;
     Complex brushPos;
     Complex prevBrushPos;
-    public DrawnContent (FourierCircle[] circles){
+    int drawTime = 10;
+    public DrawnContent (FourierCircle[] circles, int drawTime){
 
         this.circles = circles;
+        this.drawTime = drawTime;
 
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
@@ -37,7 +41,7 @@ public class DrawnContent extends JPanel implements ActionListener{
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON
         );
-        trailG.setColor(Color.WHITE);
+        trailG.setColor(Color.YELLOW);
 
         calculateDrawings();
         calculateDrawings();
@@ -55,11 +59,42 @@ public class DrawnContent extends JPanel implements ActionListener{
 
         Complex prevPosInUIScale = portToUIPos(prevBrushPos);
         Complex posInUIScale = portToUIPos(brushPos);
-        g2D.setPaint(Color.WHITE);
-        g2D.setStroke(new BasicStroke(2));
+        g2D.setPaint(Color.YELLOW);
+        g2D.setStroke(new BasicStroke(3));
+
+        //Slight fade
+        trailG.setComposite(
+                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.005f)
+        );
+        trailG.setColor(Color.BLACK);
+        trailG.fillRect(0, 0, trail.getWidth(), trail.getHeight());
+
+        trailG.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        trailG.setColor(Color.YELLOW);
 
         trailG.draw(new Line2D.Double(prevPosInUIScale.Re, prevPosInUIScale.Im, posInUIScale.Re, posInUIScale.Im));
         g2D.drawImage(trail, 0, 0, null);
+
+
+        for (int index = 0; index < circles.length; index++) {
+            Complex circleCenterPosUI = portToUIPos(circles[index].tailPos);
+            Complex circleEdgePosUI = portToUIPos(circles[index].tipPos);
+            g2D.setPaint(Color.GRAY);
+            g2D.setStroke(new BasicStroke(1));
+            g2D.draw(new Ellipse2D.Double(
+                    circleCenterPosUI.Re-circles[index].amplitude,
+                    circleCenterPosUI.Im-circles[index].amplitude,
+                    2*circles[index].amplitude, 2*circles[index].amplitude));
+
+            g2D.setPaint(Color.WHITE);
+            g2D.setStroke(new BasicStroke(2));
+            g2D.draw(new Line2D.Double(
+                    circleCenterPosUI.Re, circleCenterPosUI.Im,
+                        circleEdgePosUI.Re, circleEdgePosUI.Im));
+        }
+
+
+
 
     }
 

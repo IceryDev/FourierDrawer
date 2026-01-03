@@ -29,7 +29,7 @@ public class FourierDrawer {
                     FourierCircle.getAngularVelocity(freqBin, points.length, drawTime));
 
         }
-        Arrays.sort(result, Comparator.comparingDouble(a -> a.amplitude));
+        Arrays.sort(result, Comparator.comparingDouble(a -> -a.amplitude));
         return result;
     }
 

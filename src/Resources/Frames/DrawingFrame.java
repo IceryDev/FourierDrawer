@@ -15,14 +15,14 @@ public class DrawingFrame extends JFrame {
     File chosenFile;
     int sampleCount;
     int drawTime;
+    int scale;
 
-    public DrawingFrame(File chosenFile, int sampleCount, int drawTime){
+    public DrawingFrame(File chosenFile, int sampleCount, int drawTime, int scale){
 
         this.chosenFile = chosenFile;
         this.sampleCount = sampleCount;
         this.drawTime = drawTime;
-
-        System.out.println("I have the values File: " + chosenFile.getAbsolutePath() + ", and sample count of " + sampleCount);
+        this.scale = scale;
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(false);
@@ -32,8 +32,12 @@ public class DrawingFrame extends JFrame {
         this.getContentPane().setBackground(Color.BLACK);
 
         //Stuff to calculate points here. For now, manually entering points.
-        Complex[] points = { new Complex(20, 0), new Complex(0, 20),
-                    new Complex(-20, 0), new Complex(0, -20)};
+        /*Complex[] points = { new Complex(6 * this.scale, 0), new Complex(0, 4 * this.scale),
+                    new Complex((7 * this.scale), 0), new Complex(0, -(4 * this.scale))};*/
+        Complex[] points = Temp.points;
+        for (int index = 0; index < points.length; index++){
+            points[index].Im = -points[index].Im + 100;
+        }
 
         FourierCircle[] circles =
                 FourierDrawer.filterZeroAmplitudes(FourierDrawer.performDFT(points, this.drawTime));
@@ -42,7 +46,7 @@ public class DrawingFrame extends JFrame {
             System.out.println(circle.amplitude + ":" + circle.phase + ":" + circle.angularVelocity);
         }
 
-        DrawnContent mainPanel = new DrawnContent(circles);
+        DrawnContent mainPanel = new DrawnContent(circles, drawTime);
 
         Border outerGap = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 
