@@ -18,6 +18,7 @@ import java.awt.*;
 import java.awt.geom.PathIterator;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SVGHandler {
 
@@ -29,11 +30,7 @@ public class SVGHandler {
     private static double arcLengthOfLongestElement = -1;
     private static final double FLATNESS = 0.5;
 
-    public static void main(String[] args){
-        SVGToPoints("./src/pi-symbol-icon.svg", 10, 5);
-    }
-
-    public static void SVGToPoints(String filePath, int sampleCount, int scale){
+    public static Complex[] SVGToPoints(String filePath, int sampleCount, int scale){
         String uri = "file:" + filePath;
 
         SVGDocument doc;
@@ -46,39 +43,65 @@ public class SVGHandler {
         }
         catch (IOException e) {
             e.printStackTrace();
-            return;
+            return null;
         }
 
         NodeList pathElements = doc.getElementsByTagName("path");
         NodeList polylineElements = doc.getElementsByTagName("polyline");
-        System.out.println(pathElements.getLength());
 
-        //Shape longestShape = findLongestShape(pathElements, polylineElements);
+        findLongestShape(pathElements, polylineElements);
 
-        longestPolyline.add(new Complex(1, 1));
-        longestPolyline.add(new Complex(-1, 1));
-        longestPolyline.add(new Complex(1, -1));
-        longestPolyline.add(new Complex(-1, -1));
-        longestPolyline.add(new Complex(1, 1));
-        longestLinelengths.add(2.0);
-        longestLinelengths.add(2.0);
-        longestLinelengths.add(2.0);
-        longestLinelengths.add(2.0);
-        for (Complex c : findEquidistantPoints(8)){
-            System.out.println(c);
+        Complex[] points = findEquidistantPoints(sampleCount);
+
+        double defaultScale = 5;
+
+        for (Complex point : points) {
+            point.Re *= (scale / defaultScale);
+            point.Im *= -(scale / defaultScale);
         }
+
+        //Remove last potentially broken element
+        points = Arrays.copyOf(points, points.length-1);
+
+        return points;
     }
 
     public static Complex[] findEquidistantPoints (int sampleCount) {
+
         Complex[] points = new Complex[sampleCount];
         double stepSize = arcLengthOfLongestElement / (sampleCount - 1);
 
+
+        double currentTotalLineLength = 0;
+        int stepNo = 0;
+
+        for (int lineNo = 0; lineNo < longestLinelengths.size(); lineNo++){
+
+            Complex lastPoint = longestPolyline.get(lineNo);
+            double currentLength = stepNo * stepSize;
+            currentTotalLineLength += longestLinelengths.get(lineNo);
+
+            while (currentTotalLineLength >= currentLength){
+                double ratio = (longestLinelengths.get(lineNo) -
+                        (currentTotalLineLength - currentLength)) / longestLinelengths.get(lineNo);
+
+                points[stepNo] = new Complex(
+                        lastPoint.Re +
+                                ((longestPolyline.get(lineNo+1).Re - longestPolyline.get(lineNo).Re) * ratio),
+                        lastPoint.Im +
+                                ((longestPolyline.get(lineNo+1).Im - longestPolyline.get(lineNo).Im) * ratio)
+                );
+
+                currentLength += stepSize;
+                stepNo++;
+            }
+        }
 
 
         return points;
     }
 
-    public static Shape findLongestShape (NodeList paths, NodeList polylines){
+    public static void findLongestShape (NodeList paths, NodeList polylines){
         Shape longestShape = null;
 
         for (int index = 0; index < paths.getLength(); index++){
@@ -121,7 +144,6 @@ public class SVGHandler {
             arcLengthOfLongestElement = Math.max(arcLengthOfLongestElement, length);
         }
 
-        return longestShape;
     }
 
     public static double computeArcLength(Shape shape){

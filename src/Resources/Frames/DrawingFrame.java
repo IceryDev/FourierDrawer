@@ -4,6 +4,7 @@ import Resources.Complex;
 import Resources.FourierCircle;
 import Resources.FourierDrawer;
 import Resources.Frames.Panels.DrawnContent;
+import Resources.SVGHandler;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -31,23 +32,16 @@ public class DrawingFrame extends JFrame {
         this.setIconImage(new ImageIcon("./src/Resources/Assets/Icon/Icon.png").getImage());
         this.getContentPane().setBackground(Color.BLACK);
 
-        //Stuff to calculate points here. For now, manually entering points.
-        /*Complex[] points = { new Complex(6 * this.scale, 0), new Complex(0, 4 * this.scale),
-                    new Complex((7 * this.scale), 0), new Complex(0, -(4 * this.scale))};*/
-        Complex[] points = Temp.points;
-        for (int index = 0; index < points.length; index++){
-            //It is negative here to account for the coordinate system difference
-            points[index].Im = -points[index].Im;
-        }
+        Complex[] points = SVGHandler.SVGToPoints(chosenFile.getAbsolutePath(), sampleCount, scale);
 
         FourierCircle[] circles =
                 FourierDrawer.extractZeroFrequency(
                         FourierDrawer.filterZeroAmplitudes(
                                 FourierDrawer.performDFT(points, this.drawTime)));
 
-        for (FourierCircle circle : circles){
+        /*for (FourierCircle circle : circles){
             System.out.println(circle.amplitude + ":" + circle.phase + ":" + circle.angularVelocity);
-        }
+        }*/ //For Debug
 
         DrawnContent mainPanel = new DrawnContent(circles, drawTime);
 

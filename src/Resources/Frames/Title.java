@@ -88,13 +88,13 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
         fileChoose.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         container.add(fileChoose);
 
-        sampleCountSlider = new JSlider(1, 101, INITIAL_SAMPLE_COUNT);
+        sampleCountSlider = new JSlider(1, 1001, INITIAL_SAMPLE_COUNT);
         sampleCountSlider.setBounds(15, 180, 200, 40);
         sampleCountSlider.setBackground(Color.BLACK);
         sampleCountSlider.setPaintTicks(true);
         sampleCountSlider.setPaintTrack(true);
-        sampleCountSlider.setMinorTickSpacing(5);
-        sampleCountSlider.setMajorTickSpacing(100);
+        sampleCountSlider.setMinorTickSpacing(50);
+        sampleCountSlider.setMajorTickSpacing(200);
         sampleCountSlider.setPaintLabels(true);
         sampleCountSlider.setForeground(Color.WHITE);
         sampleCountSlider.addChangeListener(this);
@@ -126,13 +126,13 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
         drawTimeText.setBounds(25, 225, 200, 40);
         container.add(drawTimeText);
 
-        scaleSlider = new JSlider(1, 20, INITIAL_SCALE);
+        scaleSlider = new JSlider(1, 51, INITIAL_SCALE);
         scaleSlider.setBounds(290, 200, 150, 40);
         scaleSlider.setBackground(Color.BLACK);
         scaleSlider.setPaintTicks(true);
         scaleSlider.setPaintTrack(true);
-        scaleSlider.setMinorTickSpacing(1);
-        scaleSlider.setMajorTickSpacing(19);
+        scaleSlider.setMinorTickSpacing(5);
+        scaleSlider.setMajorTickSpacing(10);
         scaleSlider.setPaintLabels(true);
         scaleSlider.setForeground(Color.WHITE);
         scaleSlider.addChangeListener(this);
