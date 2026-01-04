@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.io.File;
+import java.util.Objects;
 
 public class DrawingFrame extends JFrame {
 
@@ -29,7 +30,8 @@ public class DrawingFrame extends JFrame {
         this.setResizable(false);
         //this.setLocationRelativeTo(null);
         this.setTitle("Fourier Drawer");
-        this.setIconImage(new ImageIcon("./src/Resources/Assets/Icon/Icon.png").getImage());
+        this.setIconImage(new ImageIcon(
+                Objects.requireNonNull(getClass().getResource("/Assets/Icon/Icon.png"))).getImage());
         this.getContentPane().setBackground(Color.BLACK);
 
         Complex[] points = SVGHandler.SVGToPoints(chosenFile.getAbsolutePath(), sampleCount, scale);

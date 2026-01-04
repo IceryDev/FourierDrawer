@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Objects;
 
 public class Title extends JFrame implements ActionListener, ChangeListener {
 
@@ -40,7 +41,8 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Fourier Drawer");
-        this.setIconImage(new ImageIcon("./src/Resources/Assets/Icon/Icon.png").getImage());
+        this.setIconImage(new ImageIcon(
+                Objects.requireNonNull(getClass().getResource("/Assets/Icon/Icon.png"))).getImage());
         this.getContentPane().setBackground(Color.BLACK);
 
         JPanel container = new JPanel();
@@ -63,7 +65,8 @@ public class Title extends JFrame implements ActionListener, ChangeListener {
         byTitle.setBounds(135, 15, 200, 40);
         container.add(byTitle);
 
-        ImageIcon imageIcon = new ImageIcon("./src/Resources/Assets/Illustration.png");
+        ImageIcon imageIcon = new ImageIcon(
+                Objects.requireNonNull(getClass().getResource("/Assets/Illustration.png")));
         JLabel illustration = new JLabel();
         illustration.setIcon(imageIcon);
         illustration.setBounds(270, 25, 165, 138);
