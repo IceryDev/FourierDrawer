@@ -31,6 +31,8 @@ public class SVGHandler {
     private static final double FLATNESS = 0.5;
 
     public static Complex[] SVGToPoints(String filePath, int sampleCount, int scale){
+
+        resetArrays();
         String uri = "file:" + filePath;
 
         SVGDocument doc;
@@ -214,5 +216,11 @@ public class SVGHandler {
         parser.parse(pointsData);
 
         return producer.getShape();
+    }
+
+    public static void resetArrays(){
+        longestPolyline = new ArrayList<>();
+        longestLinelengths = new ArrayList<>();
+        arcLengthOfLongestElement = -1;
     }
 }

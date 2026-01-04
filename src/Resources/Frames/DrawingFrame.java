@@ -30,8 +30,8 @@ public class DrawingFrame extends JFrame {
         this.setResizable(false);
         //this.setLocationRelativeTo(null);
         this.setTitle("Fourier Drawer");
-        this.setIconImage(new ImageIcon(
-                Objects.requireNonNull(getClass().getResource("/Assets/Icon/Icon.png"))).getImage());
+        this.setIconImage(new ImageIcon(  //Remove the double dot in build
+                Objects.requireNonNull(getClass().getResource("../Assets/Icon/Icon.png"))).getImage());
         this.getContentPane().setBackground(Color.BLACK);
 
         Complex[] points = SVGHandler.SVGToPoints(chosenFile.getAbsolutePath(), sampleCount, scale);
